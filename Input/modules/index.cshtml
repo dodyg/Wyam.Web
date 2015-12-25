@@ -1,4 +1,36 @@
 Title: Modules
-HideSubNav: true
+NoSidebar: true
 ---
-@Html.Partial("_ChildPages")
+@{
+	IList<IGrouping<string, IDocument>> categoryGroups = 
+		Documents.FromPipeline("Modules")
+			.GroupBy(x => {
+				IReadOnlyList<OtherComment> categoryComments = x.List<OtherComment>("CategoryComments");
+				return categoryComments == null ? string.Empty : categoryComments[0].Html;
+			})
+			.OrderBy(x => x.Key)
+			.ToList();
+	foreach(IGrouping<string, IDocument> categoryGroup in categoryGroups)
+	{
+		if(!string.IsNullOrWhiteSpace(categoryGroup.Key))
+		{
+			<h1>@categoryGroup.Key</h1>
+			<hr />
+		}
+					
+		foreach(IDocument childDoc in categoryGroup
+			.OrderBy(x => x.String("DisplayName")))
+		{
+			<h2>
+				<strong><a href="@PathHelper.ToRootLink(PathHelper.RemoveExtension(childDoc.String("RelativeFilePath")))">@(childDoc.String("DisplayName"))</a></strong>
+				@{					
+					string summary = childDoc.String("Summary");
+					if(!string.IsNullOrWhiteSpace(summary))
+					{
+						<small>@Html.Raw(summary)</small>
+					}
+				}
+			</h2>
+		} 
+	}	
+}

@@ -1,4 +1,5 @@
 Title: Community
+NoSidebar: true
 ---
 Here are some awesome Wyam-related goodies from the community. Are you doing something cool with Wyam? Let us and everyone else know by <a href='https://github.com/Wyamio/Wyam.Web/edit/master/Input/@(Model.String("RelativeFilePath"))'>editing this page</a>.
 

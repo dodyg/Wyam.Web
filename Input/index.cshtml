@@ -1,8 +1,18 @@
 Title: A simple to use, highly modular, and extremely configurable static content generator
+NoSidebar: true
+NoContainer: true
+NoGutter: true
 ---
+<div class="jumbotron jumbotron-intro">
+	<div class="container-background">
+		<div class="container">
+			<h1>Wyam is a highly modular and extremely configurable static content generator and toolkit.</h1>
+		</div>
+	</div>
+</div>
 <div class="jumbotron jumbotron-description">
     <div class="container">
-	    <p class="lead"><strong>Wyam is different.</strong> It's not a Jekyll clone (not that there's anything wrong with them) and it's not designed around blogs (though it's great at those too). Wyam is a static <em>content</em> generator and can be used to generate web sites, produce documentation, create ebooks, and much more. Since everything is configured by chaining together flexible modules (that you can even write yourself), the only limits to what it can create are your imagination.</p>
+	    <p><h3><strong>Wyam is different.</strong> It's not a Jekyll clone (not that there's anything wrong with them) and it's not designed around blogs (though it's great at those too). Wyam is a static <em>content</em> generator and can be used to generate web sites, produce documentation, create ebooks, and much more. Since everything is configured by chaining together flexible modules (that you can even write yourself), the only limits to what it can create are your imagination.</h3></p>
 		
 		<p class="text-center">
 			<a class="github-button" href="https://github.com/Wyamio/Wyam" data-icon="octicon-star" data-style="mega" data-count-href="/Wyamio/Wyam/stargazers" data-count-api="/repos/Wyamio/Wyam#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star Wyamio/Wyam on GitHub">Star</a> <a class="github-button" href="https://github.com/Wyamio/Wyam" data-icon="octicon-eye" data-style="mega" data-count-href="/Wyamio/Wyam/watchers" data-count-api="/repos/Wyamio/Wyam#subscribers_count" data-count-aria-label="# watchers on GitHub" aria-label="Watch Wyamio/Wyam on GitHub">Watch</a> <a href="https://twitter.com/wyamio" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @@wyamio</a>
@@ -19,11 +29,11 @@ Title: A simple to use, highly modular, and extremely configurable static conten
 		<li>Written in .NET and <a href="/knowledgebase/writing-a-module">easily extensible</a></li>
 		<li><a href="/getting-started/installation">Low ceremony</a> - download a zip file, unzip, and run</li>
 		<li>Flexible <a href="/getting-started/configuration">script-based configuration</a> using the power of the .NET Compiler Platform (Roslyn)</li>
-		<li>Lots of <a href="/modules">modules</a> for things like <a href="/modules/readfiles">reading</a> and <a href="/modules/writefiles">writing</a> files, handling <a href="/modules/frontmatter">frontmatter</a>, and manipulating <a href="/modules/metadata">metadata</a></li>
+		<li>Lots of <a href="/modules">modules</a> for things like <a href="/modules/readfiles">reading</a> and <a href="/modules/writefiles">writing</a> files, handling <a href="/modules/frontmatter">frontmatter</a>, and manipulating <a href="/modules/meta">metadata</a></li>
 		<li><a href="/modules/yaml">YAML parser</a></li>
 		<li><a href="/modules/less">Less CSS compiler</a></li>
 		<li><a href="/modules/image">Image manipulation</a></li>
-		<li>Support for multiple templating languages including <a href="/modules/razor">Razor</a></li>
+		<li>Support for multiple templating languages including <a href="/modules/markdown">Markdown</a> and <a href="/modules/razor">Razor</a></li>
 		<li>Integrated <a href="/getting-started/usage">web server</a> for previewing output</li>
 		<li>Integrated <a href="/getting-started/usage">file watching</a> and regeneration</li>
 		<li>Full <a href="/getting-started/configuration#nuget">NuGet support</a></li>
@@ -33,7 +43,7 @@ Title: A simple to use, highly modular, and extremely configurable static conten
 	
 	<h1>Usage</h1>
 	<hr />
-	<p>The best way to get started is to <a href="/getting-started/usage">use the command line application</a>:</p>
+	<p><strong><a href="https://github.com/Wyamio/Wyam/releases">Go download the latest version now</a></strong> (look at <em>Downloads</em> under each release). Then unzip the Wyam.zip archive, write some <a href="/modules/markdown">Markdown</a> or <a href="/modules/razor">Razor</a> files, run the following command, and watch the magic happen:</p>
 	<pre>c:\MySite&gt;<strong>Wyam.exe --preview --watch</strong>
 	Loading configuration from c:\MySite\config.wyam.
 	Cleaning output directory c:\MySite\.\Output...
@@ -50,5 +60,5 @@ Title: A simple to use, highly modular, and extremely configurable static conten
 	Watching folder c:\MySite\.\Input...
 	Hit any key to exit...	
 	</pre>
-	<p>Read more about <a href="/getting-started/configuration">configuration files</a> and the <a href="/getting-started/usage">available command line arguments</a>.</p>
+	<p>Read more about <a href="/getting-started/configuration">configuration files</a> and the <a href="/getting-started/usage">available command line arguments</a>. Then check out the full list of <a href="/modules">modules</a>.</p>
 </div>

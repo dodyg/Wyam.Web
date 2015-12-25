@@ -47,19 +47,14 @@ From the `Install(...)` method you can also specify the acceptable package versi
 
 By default, packages are downloaded to `\packages`. If you want to change this, set `Packages.Path` to the relative folder where you want packages to be downloaded. For example, you could set this to a system-wide folder if you have several scripts that share the same packages.
 
-Note that some commonly-used module libraries are made available in the command line application by default and don't need to be explicitly specified in the configuration file unless you're using the embedded version of Wyam. These are:
-* `Wyam.Modules.Markdown`
-* `Wyam.Modules.Razor`
-* `Wyam.Modules.Yaml`
-
 ## <a name="assemblies"></a>Assemblies
 
 In addition to NuGet packages you can also load assemblies. This is accomplished by using the `Assemblies` property. You can load all the assemblies in a directory with the `LoadDirectory(string path, SearchOption searchOption = SearchOption.AllDirectories)` method. The specified directory can either be relative to the active directory or absolute. You can also load a single assembly by location with the `LoadFile(string path)` method and by full name with the `Load(string name)` method. For example:
 
 ```
 Assemblies
-    .LoadDirectory(@@"lib")
-	.LoadFile(@@"foo\bar.dll")
+    .LoadDirectory(@"lib")
+	.LoadFile(@"foo\bar.dll")
 	.Load("SampleAssembly, Version=1.0.2004.0, Culture=neutral, PublicKeyToken=8744b20f8da049e3");
 ```
 
@@ -193,13 +188,50 @@ Pipelines.Add("Markdown",
 );
 ```
 
+### Automatic Lambda Generation
+
+Many modules accept functions so that you can use information about the current `IExecutionContext` and/or `IDocument` when executing the module. For example, you may want to write files to disk in different locations depending on some value in each document's metadata. To make this easier in simple cases, and to assist users who may not be familiar with the [C# lambda expression syntax](https://msdn.microsoft.com/en-us/library/bb397687.aspx), the configuration file will automatically generate lambda expressions when using a special syntax. This generation will only happen for module constructors and fluent configuration methods. Any other method you use that requires a function will still have to specify it explicitly.
+
+If the module or fluent configuration method has a `ContextConfig` delegate argument, you can instead use any variable name that starts with `@ctx`. For example:
+
+```
+Foo(@ctx2.InputFolder)
+```
+will be expanded to:
+
+```
+Foo(@ctx2 => @ctx2.InputFolder)
+```
+
+Likewise, any variable name that starts with `@doc` will be expanded to a `DocumentConfig` delegate. For example:
+
+```
+Foo(@doc["SomeMetadataValue"])
+```
+will be expanded to:
+
+```
+Foo((@doc, _) => @doc["SomeMetadataValue"])
+```
+
+If you use both `@ctx` and `@doc`, a `DocumentConfig` delegate will be generated that uses both values. For example:
+
+```
+Foo(@doc[@ctx.InputFolder])
+```
+will be expanded to:
+
+```
+Foo((@doc, @ctx) => @doc[@ctx.InputFolder])
+```
+
 ## Folders
 
 You can access the folders Wyam uses by getting `RootFolder`, `InputFolder`, and/or `OutputFolder` in the configuration script.
 
 ## Execution Ordering
 
-Be aware that the configuration file only *configures* the pipelines. Each pipeline is executed in the order in which they were first added after the entire configuration file is evaluated. This means that you can't declare one pipeline, then declare another, and then add a new module to the first pipeline expecting it to reflect what happened in the second one. The second pipeline won't execute until the entire first pipeline is complete, including any modules that were added to it after the second one was declared. If you need to run some modules, switch to a different pipeline, and the perform additional processing on the first set of documents, look into the [Documents](/modules/documents) and [ConcatDocuments](/modules/concatdocuments) modules.
+Be aware that the configuration file only *configures* the pipelines. Each pipeline is executed in the order in which they were first added after the entire configuration file is evaluated. This means that you can't declare one pipeline, then declare another, and then add a new module to the first pipeline expecting it to reflect what happened in the second one. The second pipeline won't execute until the entire first pipeline is complete, including any modules that were added to it after the second one was declared. If you need to run some modules, switch to a different pipeline, and the perform additional processing on the first set of documents, look into the [Documents](/modules/documents) module.
 
 # Example
 ---
@@ -208,9 +240,8 @@ The full configuration file for this documentation site is given below as an exa
 
 ```
 // Setup code
-
 Packages
-	.Install("Bootstrap")
+	.Install("Twitter.Bootstrap.Less", "[3.3.5]")
 	.Install("jQuery", "[2.1.1]");
 	
 ===
@@ -233,7 +264,17 @@ Pipelines.Add("Content",
 	WriteFiles(".html")
 );
 
+Pipelines.Add("Less",
+    ReadFiles("master.less"),
+    Concat(ReadFiles("bootstrap.less")),
+    Less(),
+    WriteFiles(".css")
+);
+
 Pipelines.Add("Resources",
-	CopyFiles("*").Where(x => Path.GetExtension(x) != ".cshtml" && Path.GetExtension(x) != ".md")
+	CopyFiles("*").Where(x => 
+		Path.GetExtension(x) != ".cshtml" 
+		&& Path.GetExtension(x) != ".md"
+		&& Path.GetExtension(x) != ".less")
 );
 ```
